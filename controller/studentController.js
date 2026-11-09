@@ -1,5 +1,6 @@
 const db=require("../utils/db-connection");
 const Student=require("../models/students");
+const IdentityCard=require("../models/identityCard");
 
 const addEntries= async (req, res)=>{
     try {
@@ -13,27 +14,41 @@ const addEntries= async (req, res)=>{
         res.status(500).send("unable to make an entry");
     }
 
-
+    
     // const insertQuery=`insert into students(name,email) values(?,?)`;
     // db.execute(insertQuery,[name,email],(err)=>{
-    //     if(err){
-    //         console.error(err.message);
-    //         res.status(500).send(err.message);
-    //         db.end();
-    //         return;
-    //     }
+        //     if(err){
+            //         console.error(err.message);
+            //         res.status(500).send(err.message);
+            //         db.end();
+            //         return;
+            //     }
+            
+            //     console.log("values inserted successfully");
+            //     res.status(200).send(`student with name ${name} added successfully`);
+            // })
+            
+        }
+        
+        const addingValuesToTheIdentityTable=async (req,res)=>{
+            try{
+                const student = await Student.create(req.body.students);
+                const idCard = await IdentityCard.create({
+                    ...req.body.IdentityCard,
+                    StudentId: student.id
+                });
+                res.status(201).json({student, idCard});
+            }catch(error){
+                res.status(500).json({error: error.message});
+            }
+        }
 
-    //     console.log("values inserted successfully");
-    //     res.status(200).send(`student with name ${name} added successfully`);
-    // })
-
-}
-
-const updateEntry=async (req,res)=>{
-    try{
-        const {id} = req.params;
-        const {name}=req.body;
-
+        
+        const updateEntry=async (req,res)=>{
+            try{
+                const {id} = req.params;
+                const {name}=req.body;
+                
         const updatedStudent = await Student.findByPk(id);
         if(!updatedStudent){
             res.status(404).send(`user is not found`);
@@ -109,5 +124,6 @@ const deleteEntry=async (req,res)=>{
 module.exports={
     addEntries,
     updateEntry,
-    deleteEntry
+    deleteEntry,
+    addingValuesToTheIdentityTable
 }

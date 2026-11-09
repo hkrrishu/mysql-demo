@@ -5,7 +5,7 @@ const IdentityCard = sequelize.define('IdentityCard',{
     id:{
         type:DataTypes.INTEGER,
         primaryKey:true,
-        allowNull:true,
+        autoIncrement:true,
     },
     cardNo:{
         type:DataTypes.STRING,

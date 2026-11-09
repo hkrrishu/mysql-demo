@@ -6,4 +6,6 @@ const router = express.Router();
 router.post("/add",studnetController.addEntries);
 router.put("/update/:id",studnetController.updateEntry);
 router.delete("/delete/:id",studnetController.deleteEntry);
+
+router.post("/addingStudentWithCard",studnetController.addingValuesToTheIdentityTable);
 module.exports = router;
